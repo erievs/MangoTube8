@@ -1,0 +1,317 @@
+﻿<phone:PhoneApplicationPage
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+        xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d"
+        x:Class="MangoTube8.MainPage"
+
+        SupportedOrientations="Portrait" Orientation="Portrait"
+        shell:SystemTray.IsVisible="True">
+
+    <phone:PhoneApplicationPage.Resources>
+
+        <Storyboard x:Name="ShowSearchBox">
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="YouTubeLogo" Storyboard.TargetProperty="Visibility">
+                <DiscreteObjectKeyFrame KeyTime="0:0:0">
+                    <DiscreteObjectKeyFrame.Value>
+                        <Visibility>Collapsed</Visibility>
+                    </DiscreteObjectKeyFrame.Value>
+                </DiscreteObjectKeyFrame>
+            </ObjectAnimationUsingKeyFrames>
+
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="SearchTextBox" Storyboard.TargetProperty="Visibility">
+                <DiscreteObjectKeyFrame KeyTime="0:0:0">
+                    <DiscreteObjectKeyFrame.Value>
+                        <Visibility>Visible</Visibility>
+                    </DiscreteObjectKeyFrame.Value>
+                </DiscreteObjectKeyFrame>
+            </ObjectAnimationUsingKeyFrames>
+
+            <DoubleAnimation
+                Storyboard.TargetName="SearchTextBox"
+                Storyboard.TargetProperty="(UIElement.Opacity)"
+                From="0" To="1" Duration="0:0:0.3"/>
+            <DoubleAnimation
+                Storyboard.TargetName="SearchTextBox"
+                Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)"
+                From="200" To="0" Duration="0:0:0.3"/>
+        </Storyboard>
+
+        <Storyboard x:Name="HideSearchBox">
+            <DoubleAnimation
+                Storyboard.TargetName="SearchTextBox"
+                Storyboard.TargetProperty="(UIElement.Opacity)"
+                From="1" To="0" Duration="0:0:0.3"
+                Completed="HideSearchBox_Completed"/>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="SearchTextBox" Storyboard.TargetProperty="Visibility">
+                <DiscreteObjectKeyFrame KeyTime="0:0:0.3">
+                    <DiscreteObjectKeyFrame.Value>
+                        <Visibility>Collapsed</Visibility>
+                    </DiscreteObjectKeyFrame.Value>
+                </DiscreteObjectKeyFrame>
+            </ObjectAnimationUsingKeyFrames>
+
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="YouTubeLogo" Storyboard.TargetProperty="Visibility">
+                <DiscreteObjectKeyFrame KeyTime="0:0:0.3">
+                    <DiscreteObjectKeyFrame.Value>
+                        <Visibility>Visible</Visibility>
+                    </DiscreteObjectKeyFrame.Value>
+                </DiscreteObjectKeyFrame>
+            </ObjectAnimationUsingKeyFrames>
+        </Storyboard>
+
+        <Storyboard x:Name="BubbleLoadingAnimationRec" RepeatBehavior="Forever">
+            <DoubleAnimation Storyboard.TargetName="Bubble1Rec" Storyboard.TargetProperty="Opacity"
+                         From="0.0" To="1.0" Duration="0:0:1" AutoReverse="True"/>
+            <DoubleAnimation Storyboard.TargetName="Bubble2Rec" Storyboard.TargetProperty="Opacity"
+                         From="0.0" To="1.0" Duration="0:0:1.2" AutoReverse="True"/>
+            <DoubleAnimation Storyboard.TargetName="Bubble3Rec" Storyboard.TargetProperty="Opacity"
+                         From="0.0" To="1.0" Duration="0:0:1.4" AutoReverse="True"/>
+        </Storyboard>
+
+        <Storyboard x:Name="BubbleLoadingAnimationTrending" RepeatBehavior="Forever">
+            <DoubleAnimation Storyboard.TargetName="Bubble1Trend" Storyboard.TargetProperty="Opacity"
+                         From="0.0" To="1.0" Duration="0:0:1" AutoReverse="True"/>
+            <DoubleAnimation Storyboard.TargetName="Bubble2Trend" Storyboard.TargetProperty="Opacity"
+                         From="0.0" To="1.0" Duration="0:0:1.2" AutoReverse="True"/>
+            <DoubleAnimation Storyboard.TargetName="Bubble3Trend" Storyboard.TargetProperty="Opacity"
+                         From="0.0" To="1.0" Duration="0:0:1.4" AutoReverse="True"/>
+        </Storyboard>
+
+        <Storyboard x:Name="BubbleLoadingAnimationSpotlight" RepeatBehavior="Forever">
+            <DoubleAnimation Storyboard.TargetName="Bubble1Spot" Storyboard.TargetProperty="Opacity"
+                         From="0.0" To="1.0" Duration="0:0:1" AutoReverse="True"/>
+            <DoubleAnimation Storyboard.TargetName="Bubble2Spot" Storyboard.TargetProperty="Opacity"
+                         From="0.0" To="1.0" Duration="0:0:1.2" AutoReverse="True"/>
+            <DoubleAnimation Storyboard.TargetName="Bubble3Spot" Storyboard.TargetProperty="Opacity"
+                         From="0.0" To="1.0" Duration="0:0:1.4" AutoReverse="True"/>
+        </Storyboard>
+
+    </phone:PhoneApplicationPage.Resources>
+
+    <Grid x:Name="LayoutRoot" Background="#f1f0ec">
+
+        <Grid Background="#282828" Height="70" VerticalAlignment="Top">
+                
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+
+                <Image 
+                x:Name="YouTubeLogo" 
+                Source="/Assets/MangoTube8Logo.png" 
+                VerticalAlignment="Center" 
+                HorizontalAlignment="Center" 
+                Grid.Column="1" 
+                Margin="0,0,90,0" 
+                Width="Auto" 
+                Height="100" />
+
+
+            <Grid x:Name="SearchContainer" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,30,0" Grid.Column="2">
+                <TextBox 
+                    x:Name="SearchTextBox" 
+                    Width="400" Height="65" 
+                    VerticalAlignment="Center"
+                    Background="White" 
+                    Foreground="Black"  
+                    Opacity="1"  
+                    RenderTransformOrigin="0.5,0.5"
+                    Visibility="Collapsed"  
+                    KeyDown="SearchTextBox_KeyDown"
+                    Margin="0,0,50,0">
+                    <TextBox.RenderTransform>
+                        <TranslateTransform X="0"/>
+                    </TextBox.RenderTransform>
+                </TextBox>
+            </Grid>
+
+            <Button 
+                x:Name="SearchButton" 
+                Width="80" 
+                Height="76"
+                Background="Transparent"
+                BorderThickness="0"
+                Click="SearchButton_Click"
+                Margin="0,0,0,0"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                Grid.Column="2">
+                <Image
+                    x:Name="SearchIcon"
+                    Source="/Assets/SearchIcon.png"
+                    Width="80"  
+                    Height="76" 
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center" />
+            </Button>
+                
+        </Grid>
+
+
+        <Grid Margin="0,55,0,0">
+            <phone:Pivot Title="" Foreground="Black"  FontWeight="Thin" Background="White" x:Name="MainPivot" SelectionChanged="MainPivot_SelectionChanged" Loaded="MainPivot_Loaded" Margin="0,10,0,-20">
+             
+                <phone:Pivot.HeaderTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding}"  FontWeight="Thin" FontSize="42" Margin="-10,0,0,0" Foreground="#222222" />
+                    </DataTemplate>
+                </phone:Pivot.HeaderTemplate>
+
+                <phone:PivotItem Header="recommended" Tag="recommended">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="-20,-12.5,0,28">
+                        <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch">
+
+
+                            <StackPanel x:Name="LoadingPanelRecommended" HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal" Visibility="Collapsed">
+                                <Ellipse x:Name="Bubble1Rec" Width="15" Height="15" Fill="Gray" Margin="5"/>
+                                <Ellipse x:Name="Bubble2Rec" Width="15" Height="15" Fill="Gray" Margin="5"/>
+                                <Ellipse x:Name="Bubble3Rec" Width="15" Height="15" Fill="Gray" Margin="5"/>
+                            </StackPanel>
+
+                            <ItemsControl Margin="0,0,0,0" x:Name="RecommendedItemsControl">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+
+                            <Button Content="more" 
+                                HorizontalAlignment="Stretch" 
+                                VerticalAlignment="Center"
+                                Background="#de8339"
+                                Foreground="White"
+                                Name="LoadMoreRec"
+                                FontSize="18" 
+                                FontWeight="Medium"
+                                Click="LoadMoreButton_Click"
+                                Margin="5,0,0,0"/>
+
+                        </StackPanel>
+                    </ScrollViewer>
+                </phone:PivotItem>
+
+
+                <phone:PivotItem Header="trending" Tag="trending">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="-20,-12.5,0,28">
+                        <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch">
+
+                            <StackPanel x:Name="LoadingPanelTrending" HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal" Visibility="Collapsed">
+                                <Ellipse x:Name="Bubble1Trend" Width="15" Height="15" Fill="Gray" Margin="5"/>
+                                <Ellipse x:Name="Bubble2Trend" Width="15" Height="15" Fill="Gray" Margin="5"/>
+                                <Ellipse x:Name="Bubble3Trend" Width="15" Height="15" Fill="Gray" Margin="5"/>
+                            </StackPanel>
+
+                            <ItemsControl Margin="0,0,0,0" x:Name="TrendingItemsControl">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+             
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+
+                                <Button Content="more" 
+                                HorizontalAlignment="Stretch" 
+                                VerticalAlignment="Center"
+                                Background="#de8339"
+                                Foreground="White"
+                                Name="LoadMore"
+                                FontSize="18" 
+                                FontWeight="Medium"
+                                Click="LoadMoreButton_Click"
+                                Margin="5,0,0,0"/>
+                            
+                        </StackPanel>
+                    </ScrollViewer>
+                </phone:PivotItem>
+
+                <phone:PivotItem Header="spotlight" Tag="spotlight">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="-20,-12.5,0,28">
+                        <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch">
+
+                            <StackPanel x:Name="LoadingPanelSpot" HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal" Visibility="Collapsed">
+                                <Ellipse x:Name="Bubble1Spot" Width="15" Height="15" Fill="Gray" Margin="5"/>
+                                <Ellipse x:Name="Bubble2Spot" Width="15" Height="15" Fill="Gray" Margin="5"/>
+                                <Ellipse x:Name="Bubble3Spot" Width="15" Height="15" Fill="Gray" Margin="5"/>
+                            </StackPanel>
+
+                            <ItemsControl Margin="0,0,0,0" x:Name="SpotlightItemsControl">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+
+                            <Button Content="more" 
+                                HorizontalAlignment="Stretch" 
+                                VerticalAlignment="Center"
+                                Background="#de8339"
+                                Foreground="White"
+                                Name="LoadMoreSpot"
+                                FontSize="18" 
+                                FontWeight="Medium"
+                                Click="LoadMoreButton_Click"
+                                Margin="5,0,10,0"/>
+
+                        </StackPanel>
+                    </ScrollViewer>
+                </phone:PivotItem>
+
+                <phone:PivotItem Header="browse" Tag="browse">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <Grid Margin="0,0,0,0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+
+                            <StackPanel Grid.Row="0" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="5">
+                                <Image Source="/Assets/PopularIcon.png" Width="100" Height="100" Stretch="Uniform"/>
+                                <TextBlock Text="popular" FontSize="12" HorizontalAlignment="Left" Margin="0,5,0,0" Foreground="#000000"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="5">
+                                <Image Source="Assets/SportsIcon.png" Width="100" Height="100" Stretch="Uniform"/>
+                                <TextBlock Text="sports" FontSize="12" HorizontalAlignment="Left" Margin="0,5,0,0" Foreground="#000000"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="0" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="5">
+                                <Image Source="Assets/NewsIcon.png" Width="100" Height="100" Stretch="Uniform"/>
+                                <TextBlock Text="news" FontSize="12" HorizontalAlignment="Left" Margin="0,5,0,0" Foreground="#000000"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="0" Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="5">
+                                <Image Source="Assets/GamingIcon.png" Width="100" Height="100" Stretch="Uniform"/>
+                                <TextBlock Text="games" FontSize="12" HorizontalAlignment="Left" Margin="0,5,0,0" Foreground="#000000"/>
+                            </StackPanel>
+
+
+                            <StackPanel Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="5">
+                                <Image Source="Assets/EduactionIcon.png" Width="100" Height="100" Stretch="Uniform"/>
+                                <TextBlock Text="education" FontSize="12" HorizontalAlignment="Left" Margin="0,5,0,0" Foreground="#000000"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="5">
+                                <Image Source="Assets/PodcastIcon.png" Width="100" Height="100" Stretch="Uniform"/>
+                                <TextBlock Text="podcasts" FontSize="12" HorizontalAlignment="Left" Margin="0,5,0,0" Foreground="#000000"/>
+                            </StackPanel>
+
+                        </Grid>
+                    </ScrollViewer>
+                </phone:PivotItem>
+
+
+            </phone:Pivot>
+        </Grid>
+    </Grid>
+
+</phone:PhoneApplicationPage>
